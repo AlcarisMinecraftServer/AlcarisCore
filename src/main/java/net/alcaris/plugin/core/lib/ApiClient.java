@@ -1,4 +1,4 @@
-package net.alcaris.plugin.core.http;
+package net.alcaris.plugin.core.lib;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;

@@ -1,7 +1,7 @@
 package net.alcaris.plugin.core.registry;
 
 import net.alcaris.plugin.core.AlcarisCore;
-import net.alcaris.plugin.core.http.ApiClient;
+import net.alcaris.plugin.core.lib.ApiClient;
 import net.alcaris.plugin.core.model.item.ItemBaseModel;
 
 import java.lang.reflect.Type;

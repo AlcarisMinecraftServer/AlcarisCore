@@ -2,12 +2,10 @@ package net.alcaris.plugin.core;
 
 import net.alcaris.plugin.core.commands.CommandManager;
 import net.alcaris.plugin.core.commands.SubCommand;
-import net.alcaris.plugin.core.http.ApiClient;
+import net.alcaris.plugin.core.lib.ApiClient;
 import net.alcaris.plugin.core.lib.APIWebSocketClient;
 import net.alcaris.plugin.core.lib.DataSyncManager;
 import net.alcaris.plugin.core.registry.ItemRegistry;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
