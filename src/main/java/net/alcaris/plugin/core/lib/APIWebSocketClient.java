@@ -39,6 +39,7 @@ public class APIWebSocketClient extends WebSocketClient {
             String type = json.has("type") ? json.get("type").getAsString() : "unknown";
             String category = json.has("category") ? json.get("category").getAsString() : "unknown";
             String actor = json.has("actor") ? json.get("actor").getAsString() : "unknown";
+            String id = json.has("id") ? json.get("id").getAsString() : "unknown";
             String platform = json.has("platform") ? json.get("platform").getAsString() : "unknown";
 
             plugin.getLogger().info(String.format("<%s> %s by %s (%s)", category, capitalize(type), actor, capitalize(platform)));
@@ -48,6 +49,7 @@ public class APIWebSocketClient extends WebSocketClient {
                     platform,
                     category,
                     type,
+                    id,
                     actor
             );
 

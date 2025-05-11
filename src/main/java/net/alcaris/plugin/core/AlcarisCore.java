@@ -16,9 +16,6 @@ import java.net.URI;
 import java.util.Objects;
 
 public final class AlcarisCore extends JavaPlugin {
-    public final MiniMessage miniMessage = MiniMessage.miniMessage();
-    public Component prefix = miniMessage.deserialize("[<gradient:#8a80ff:#9400d9>AlcarisCore</gradient>] ");
-
     private CommandManager CommandManager;
     private ApiClient apiClient;
     private ItemRegistry itemRegistry;

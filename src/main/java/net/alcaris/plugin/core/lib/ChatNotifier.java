@@ -26,6 +26,7 @@ public final class ChatNotifier {
                                  String platform,
                                  String category,
                                  String type,
+                                 String id,
                                  String actor) {
 
         String pf = (platform == null || platform.isBlank()) ? "Unknown" : platform.toUpperCase(Locale.ROOT);
@@ -35,14 +36,11 @@ public final class ChatNotifier {
                 capitalize(type)
         );
 
-        Component message =
-                plugin.prefix.append(
-                        Component.text("[" + pf + "] ").color(NamedTextColor.BLUE)
-                                .append(Component.text("(" + category + ") ").color(NamedTextColor.GRAY))
-                                .append(Component.text(typeNorm + " ").color(NamedTextColor.GRAY))
-                                .append(Component.text("by ").color(NamedTextColor.GRAY))
-                                .append(Component.text(actor).color(NamedTextColor.WHITE))
-                );
+        Component message = Component.text("[" + pf + "] ").color(NamedTextColor.BLUE)
+                .append(Component.text("(" + category + ":" + id + ") ").color(NamedTextColor.GRAY))
+                .append(Component.text(typeNorm + " ").color(NamedTextColor.GRAY))
+                .append(Component.text("by ").color(NamedTextColor.GRAY))
+                .append(Component.text(actor).color(NamedTextColor.WHITE));
 
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (p.isOp()) {
