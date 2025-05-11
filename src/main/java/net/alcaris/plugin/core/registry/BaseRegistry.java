@@ -1,7 +1,6 @@
 package net.alcaris.plugin.core.registry;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import net.alcaris.plugin.core.AlcarisCore;
 
 import java.io.*;

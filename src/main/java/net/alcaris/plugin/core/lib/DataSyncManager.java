@@ -24,6 +24,6 @@ public class DataSyncManager {
     }
 
     public void reloadAll() {
-        registryReloaders.values().forEach(loader -> loader.get());
+        registryReloaders.values().forEach(Supplier::get);
     }
 }
