@@ -1,9 +1,11 @@
 plugins {
     id 'java'
+    id 'maven-publish'
+    id 'com.gradleup.shadow' version '9.0.0-beta8'
 }
 
 group = 'net.alcaris'
-version = '1.0.0'
+version = System.getenv("BUILD_VERSION") ?: '1.0.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -19,6 +21,9 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
+    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation("org.java-websocket:Java-WebSocket:1.5.3")
 }
 
 def targetJavaVersion = 21
