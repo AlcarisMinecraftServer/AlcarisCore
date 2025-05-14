@@ -26,7 +26,9 @@ public class ItemRegistry extends BaseRegistry<ItemBaseModel> {
                 String id = item.getId();
                 ItemBaseModel old = cache.get(id);
 
-                if (item.getVersion() != old.getVersion()) {
+                if (old == null) {
+                    plugin.getLogger().info("<item> Created: " + id);
+                } else if (item.getVersion() != old.getVersion()) {
                     plugin.getLogger().info("<item> Updated: " + id +
                             " (" + old.getVersion() + " → " + item.getVersion() + ")");
                 }
