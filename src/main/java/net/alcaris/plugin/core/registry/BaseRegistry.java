@@ -61,7 +61,7 @@ public abstract class BaseRegistry<T> {
 
         File file = new File(dir, key + ".json");
         try (Writer writer = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8)) {
-            gson.toJson(item, writer); // 非整形で出力
+            gson.toJson(item, writer);
         } catch (IOException e) {
             plugin.getLogger().warning("[AlcarisCore] Failed to save cache file: " + key);
         }

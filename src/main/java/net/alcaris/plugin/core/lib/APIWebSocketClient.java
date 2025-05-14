@@ -54,7 +54,7 @@ public class APIWebSocketClient extends WebSocketClient {
             );
 
             DataSyncManager manager = plugin.getDataSyncManager();
-            manager.reload(category);
+            manager.reloadAll();
         } catch (Exception e) {
             plugin.getLogger().warning("Failed to parse WebSocket message: " + e.getMessage());
         }
