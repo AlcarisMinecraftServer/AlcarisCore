@@ -93,6 +93,7 @@ public final class AlcarisCore extends JavaPlugin {
         CommandManager.register(name, command);
     }
 
+    @SuppressWarnings("unused")
     public ItemRegistry getItemRegistry() {
         return itemRegistry;
     }
@@ -101,6 +102,7 @@ public final class AlcarisCore extends JavaPlugin {
         return dataSyncManager;
     }
 
+    @SuppressWarnings("unused")
     public ApiClient getApiClient() {
         return apiClient;
     }
