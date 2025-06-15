@@ -1,58 +1,130 @@
-package net.alcaris.plugin.core.registry;
+package net.alcaris.plugin.core.model.item;
 
-import net.alcaris.plugin.core.AlcarisCore;
-import net.alcaris.plugin.core.lib.ApiClient;
-import net.alcaris.plugin.core.model.item.ItemBaseModel;
+import java.util.List;
 
-import java.lang.reflect.Type;
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
+@SuppressWarnings("unused")
+public class ItemWeaponModel {
+    private String weapon_type;
+    private int required_level;
+    private int max_modification;
+    private int durability;
+    private Base base;
 
-public class ItemRegistry extends BaseRegistry<ItemBaseModel> {
+    public static class Base {
+        private Attributes attributes;
+        private List<Buff> buffs;
+        private List<Effect> effects;
 
-    private final ApiClient apiClient;
+        public Attributes getAttributes() {
+            return attributes;
+        }
 
-    public ItemRegistry(AlcarisCore plugin, ApiClient apiClient) {
-        super(plugin);
-        this.apiClient = apiClient;
+        public List<Buff> getBuffs() {
+            return buffs;
+        }
+
+        public List<Effect> getEffects() {
+            return effects;
+        }
     }
 
-    @Override
-    protected CompletableFuture<List<ItemBaseModel>> fetchFromApi() {
-        return apiClient.fetchItemsAsync().thenApply(items -> {
-            Map<String, ItemBaseModel> newMap = new HashMap<>();
+    public static class Attributes {
+        private double attack_damage;
+        private double attack_range;
+        private double attack_speed;
+        private double drop_rate_bonus;
+        private double experience_bonus;
+        private double movement_speed;
 
-            for (ItemBaseModel item : items) {
-                String id = item.getId();
-                ItemBaseModel old = cache.get(id);
+        public double getAttackDamage() {
+            return attack_damage;
+        }
 
-                if (old == null) {
-                    plugin.getLogger().info("<item> Created: " + id);
-                } else if (item.getVersion() != old.getVersion()) {
-                    plugin.getLogger().info("<item> Updated: " + id +
-                            " (" + old.getVersion() + " → " + item.getVersion() + ")");
-                }
-                newMap.put(id, item);
-            }
+        public double getAttackRange() {
+            return attack_range;
+        }
 
-            cache.clear();
-            cache.putAll(newMap);
-            return items;
-        });
+        public double getAttackSpeed() {
+            return attack_speed;
+        }
+
+        public double getDropRateBonus() {
+            return drop_rate_bonus;
+        }
+
+        public double getExperienceBonus() {
+            return experience_bonus;
+        }
+
+        public double getMovementSpeed() {
+            return movement_speed;
+        }
     }
 
-    @Override
-    protected String getKey(ItemBaseModel item) {
-        return item.getId();
+    public static class Buff {
+        // TODO: Implement buff structure
     }
 
-    @Override
-    protected String getCategory() {
-        return "item";
+    public static class Effect {
+        // TODO: Implement effect structure
     }
 
-    @Override
-    protected Type getType() {
-        return ItemBaseModel.class;
+    // Backward compatibility methods
+    public String getType() {
+        return weapon_type;
+    }
+
+    public int getRequirement() {
+        return required_level;
+    }
+
+    public int getPolishingCount() {
+        return 0; // New structure doesn't use polishing count
+    }
+
+    public double getDamage() {
+        return base != null && base.getAttributes() != null ? base.getAttributes().getAttackDamage() : 0;
+    }
+
+    public double getWalkSpeed() {
+        return base != null && base.getAttributes() != null ? base.getAttributes().getMovementSpeed() : 0;
+    }
+
+    public double getAttackRange() {
+        return base != null && base.getAttributes() != null ? base.getAttributes().getAttackRange() : 0;
+    }
+
+    public double getAttackSpeed() {
+        return base != null && base.getAttributes() != null ? base.getAttributes().getAttackSpeed() : 0;
+    }
+
+    public double getXpBonus() {
+        return base != null && base.getAttributes() != null ? base.getAttributes().getExperienceBonus() : 0;
+    }
+
+    public double getLootBonus() {
+        return base != null && base.getAttributes() != null ? base.getAttributes().getDropRateBonus() : 0;
+    }
+
+    // New getters
+    public String getWeaponType() {
+        return weapon_type;
+    }
+
+    public int getRequiredLevel() {
+        return required_level;
+    }
+
+    public int getMaxModification() {
+        return max_modification;
+    }
+
+    public int getDurability() {
+        return durability;
+    }
+
+    public Base getBase() {
+        return base;
     }
 }
+
