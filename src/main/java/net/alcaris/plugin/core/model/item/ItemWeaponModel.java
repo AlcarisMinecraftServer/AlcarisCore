@@ -32,9 +32,16 @@ public class ItemWeaponModel {
         private double attack_damage;
         private double attack_range;
         private double attack_speed;
-        private double drop_rate_bonus;
-        private double experience_bonus;
         private double movement_speed;
+        private double mp;
+        private double mpr;
+        private double atk;
+        private double def;
+        private double mdf;
+        private double crt;
+        private double crd;
+        private double spd;
+        private double luk;
 
         public double getAttackDamage() {
             return attack_damage;
@@ -48,16 +55,44 @@ public class ItemWeaponModel {
             return attack_speed;
         }
 
-        public double getDropRateBonus() {
-            return drop_rate_bonus;
-        }
-
-        public double getExperienceBonus() {
-            return experience_bonus;
-        }
-
         public double getMovementSpeed() {
             return movement_speed;
+        }
+
+        public double getMp() {
+            return mp;
+        }
+
+        public double getMpr() {
+            return mpr;
+        }
+
+        public double getAtk() {
+            return atk;
+        }
+
+        public double getDef() {
+            return def;
+        }
+
+        public double getMdf() {
+            return mdf;
+        }
+
+        public double getCrt() {
+            return crt;
+        }
+
+        public double getCrd() {
+            return crd;
+        }
+
+        public double getSpd() {
+            return spd;
+        }
+
+        public double getLuk() {
+            return luk;
         }
     }
 
@@ -98,12 +133,42 @@ public class ItemWeaponModel {
         return base != null && base.getAttributes() != null ? base.getAttributes().getAttackSpeed() : 0;
     }
 
-    public double getXpBonus() {
-        return base != null && base.getAttributes() != null ? base.getAttributes().getExperienceBonus() : 0;
+
+    // 新しいステータス用のgetterメソッド
+    public double getMp() {
+        return base != null && base.getAttributes() != null ? base.getAttributes().getMp() : 0;
     }
 
-    public double getLootBonus() {
-        return base != null && base.getAttributes() != null ? base.getAttributes().getDropRateBonus() : 0;
+    public double getMpr() {
+        return base != null && base.getAttributes() != null ? base.getAttributes().getMpr() : 0;
+    }
+
+    public double getAtk() {
+        return base != null && base.getAttributes() != null ? base.getAttributes().getAtk() : 0;
+    }
+
+    public double getDef() {
+        return base != null && base.getAttributes() != null ? base.getAttributes().getDef() : 0;
+    }
+
+    public double getMdf() {
+        return base != null && base.getAttributes() != null ? base.getAttributes().getMdf() : 0;
+    }
+
+    public double getCrt() {
+        return base != null && base.getAttributes() != null ? base.getAttributes().getCrt() : 0;
+    }
+
+    public double getCrd() {
+        return base != null && base.getAttributes() != null ? base.getAttributes().getCrd() : 0;
+    }
+
+    public double getSpd() {
+        return base != null && base.getAttributes() != null ? base.getAttributes().getSpd() : 0;
+    }
+
+    public double getLuk() {
+        return base != null && base.getAttributes() != null ? base.getAttributes().getLuk() : 0;
     }
 
     // New getters
