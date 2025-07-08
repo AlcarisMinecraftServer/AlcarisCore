@@ -42,6 +42,7 @@ public class ItemWeaponModel {
         private double crd;
         private double spd;
         private double luk;
+        private double hpr; // HPRを追加
 
         public double getAttackDamage() {
             return attack_damage;
@@ -57,6 +58,10 @@ public class ItemWeaponModel {
 
         public double getMovementSpeed() {
             return movement_speed;
+        }
+
+        public double getHpr() { // HPRのgetterを追加
+            return hpr;
         }
 
         public double getMp() {
@@ -133,6 +138,9 @@ public class ItemWeaponModel {
         return base != null && base.getAttributes() != null ? base.getAttributes().getAttackSpeed() : 0;
     }
 
+    public double getHpr() {
+        return base != null && base.getAttributes() != null ? base.getAttributes().getHpr() : 0;
+    }
 
     // 新しいステータス用のgetterメソッド
     public double getMp() {

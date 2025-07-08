@@ -1,5 +1,5 @@
 name: AlcarisCore
-version: '1.0.0'
+version: '1.0.0-somen1000'
 main: net.alcaris.plugin.core.AlcarisCore
 api-version: '1.21'
 authors: [ 'Alcaris Team' ]

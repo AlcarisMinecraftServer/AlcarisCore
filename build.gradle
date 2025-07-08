@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'net.alcaris'
-version = System.getenv("BUILD_VERSION") ?: '1.0.0-SNAPSHOT'
+version = System.getenv("BUILD_VERSION") ?: '1.0.0-somen1000'
 
 repositories {
     mavenCentral()
