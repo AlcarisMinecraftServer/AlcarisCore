@@ -53,7 +53,7 @@ public class APIWebSocketClient extends WebSocketClient {
             plugin.getLogger().info(String.format("<%s> %s by %s (%s)",
                     category, capitalize(type), actor, capitalize(platform)));
 
-            ChatNotifier.broadcast(platform, category, type, id, actor);
+            ChatNotifier.broadcast( platform, category, type, id, actor);
 
             DataSyncManager manager = plugin.getDataSyncManager();
             manager.reload(category)

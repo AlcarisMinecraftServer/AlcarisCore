@@ -1,6 +1,5 @@
 package net.alcaris.plugin.core.notification;
 
-import net.alcaris.plugin.core.AlcarisCore;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;

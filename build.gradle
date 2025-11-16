@@ -20,10 +20,15 @@ repositories {
 }
 
 dependencies {
-    compileOnly('io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT')
-    implementation("com.google.code.gson:gson:2.10.1")
-    implementation("com.squareup.okhttp3:okhttp:4.9.3")
-    implementation("org.java-websocket:Java-WebSocket:1.5.3")
+    compileOnly 'io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT'
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+    implementation 'org.java-websocket:Java-WebSocket:1.5.3'
+
+    implementation 'com.zaxxer:HikariCP:5.1.0'
+    implementation 'com.mysql:mysql-connector-j:8.2.0'
+    implementation 'org.slf4j:slf4j-api:2.0.9'
+    implementation 'org.slf4j:slf4j-simple:2.0.9'
 }
 
 def targetJavaVersion = 21

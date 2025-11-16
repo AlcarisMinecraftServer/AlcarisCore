@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.net.URI;
+import java.sql.SQLException;
 import java.util.concurrent.CompletableFuture;
 
 public final class AlcarisCore extends JavaPlugin {
@@ -35,7 +36,14 @@ public final class AlcarisCore extends JavaPlugin {
             }
 
             // Load Database
-            // this.databaseManager = new DatabaseManager(config);
+            try {
+                this.databaseManager = new DatabaseManager(this, this.config);
+                this.databaseManager.initialize();
+                getLogger().info("Database connection established");
+            } catch (SQLException e) {
+                shutdownWithError("Failed to initialize database: " + e.getMessage());
+                return;
+            }
 
             // Load API Client
             this.apiClient = new ApiClient(
@@ -106,17 +114,18 @@ public final class AlcarisCore extends JavaPlugin {
             }
         }
 
-//        if (databaseManager != null) {
-//            try {
-//                databaseManager.shutdown();
-//                getLogger().info("Database connection pool closed");
-//            } catch (Exception e) {
-//                getLogger().warning("Failed to close database: " + e.getMessage());
-//            }
-//        }
-
         if (apiClient != null) {
             apiClient.shutdown();
+            getLogger().info("API client shutdown");
+        }
+
+        if (databaseManager != null) {
+            try {
+                databaseManager.shutdown();
+                getLogger().info("Database connection pool closed");
+            } catch (Exception e) {
+                getLogger().warning("Failed to close database: " + e.getMessage());
+            }
         }
     }
 
