@@ -1,54 +1,129 @@
 package net.alcaris.plugin.core.model.item;
 
+import java.util.List;
+
 @SuppressWarnings("unused")
 public class ItemWeaponModel {
-    private String type;
-    private int requirement;
-    private int polishingCount;
-    private double damage;
-    private double walkSpeed;
-    private double attackRange;
-    private double attackSpeed;
-    private double xpBonus;
-    private double lootBonus;
+    private String weapon_type;
+    private int required_level;
+    private int max_modification;
+    private int durability;
+    private Base base;
 
+    public static class Base {
+        private Attributes attributes;
+        private List<Buff> buffs;
+        private List<Effect> effects;
 
+        public Attributes getAttributes() {
+            return attributes;
+        }
+
+        public List<Buff> getBuffs() {
+            return buffs;
+        }
+
+        public List<Effect> getEffects() {
+            return effects;
+        }
+    }
+
+    public static class Attributes {
+        private double attack_damage;
+        private double attack_range;
+        private double attack_speed;
+        private double drop_rate_bonus;
+        private double experience_bonus;
+        private double movement_speed;
+
+        public double getAttackDamage() {
+            return attack_damage;
+        }
+
+        public double getAttackRange() {
+            return attack_range;
+        }
+
+        public double getAttackSpeed() {
+            return attack_speed;
+        }
+
+        public double getDropRateBonus() {
+            return drop_rate_bonus;
+        }
+
+        public double getExperienceBonus() {
+            return experience_bonus;
+        }
+
+        public double getMovementSpeed() {
+            return movement_speed;
+        }
+    }
+
+    public static class Buff {
+        // TODO: Implement buff structure
+    }
+
+    public static class Effect {
+        // TODO: Implement effect structure
+    }
+
+    // Backward compatibility methods
     public String getType() {
-        return type;
+        return weapon_type;
     }
 
     public int getRequirement() {
-        return requirement;
+        return required_level;
     }
 
     public int getPolishingCount() {
-        return polishingCount;
+        return 0; // New structure doesn't use polishing count
     }
 
     public double getDamage() {
-        return damage;
+        return base != null && base.getAttributes() != null ? base.getAttributes().getAttackDamage() : 0;
     }
-
 
     public double getWalkSpeed() {
-        return walkSpeed;
+        return base != null && base.getAttributes() != null ? base.getAttributes().getMovementSpeed() : 0;
     }
-
 
     public double getAttackRange() {
-        return attackRange;
+        return base != null && base.getAttributes() != null ? base.getAttributes().getAttackRange() : 0;
     }
 
-
     public double getAttackSpeed() {
-        return attackSpeed;
+        return base != null && base.getAttributes() != null ? base.getAttributes().getAttackSpeed() : 0;
     }
 
     public double getXpBonus() {
-        return xpBonus;
+        return base != null && base.getAttributes() != null ? base.getAttributes().getExperienceBonus() : 0;
     }
 
     public double getLootBonus() {
-        return lootBonus;
+        return base != null && base.getAttributes() != null ? base.getAttributes().getDropRateBonus() : 0;
+    }
+
+    // New getters
+    public String getWeaponType() {
+        return weapon_type;
+    }
+
+    public int getRequiredLevel() {
+        return required_level;
+    }
+
+    public int getMaxModification() {
+        return max_modification;
+    }
+
+    public int getDurability() {
+        return durability;
+    }
+
+    public Base getBase() {
+        return base;
     }
 }
