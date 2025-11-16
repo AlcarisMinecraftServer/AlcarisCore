@@ -95,6 +95,8 @@ public final class AlcarisCore extends JavaPlugin {
 
             this.webSocketClient = new APIWebSocketClient(socketUri, this.config.getApiKey(), this);
             this.webSocketClient.connectBlocking();
+
+            getLogger().info("WebSocket connected");
         } catch (Exception e) {
             getLogger().severe("WebSocket connection failed: " + e.getMessage());
             getLogger().warning("Server will run without real-time updates");
