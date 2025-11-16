@@ -1,11 +1,15 @@
 package net.alcaris.plugin.core.model.item;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
 @SuppressWarnings("unused")
 public class ItemBaseModel {
+    private static final Gson GSON = new Gson();
+
     private String id;
     private ItemCategory category;
     private long version;
@@ -21,45 +25,60 @@ public class ItemBaseModel {
     public String getId() {
         return id;
     }
-
     public ItemCategory getCategory() {
         return category;
     }
-
     public long getVersion() {
         return version;
     }
-
     public String getName() {
         return name;
     }
-
     public List<String> getLore() {
         return lore;
     }
-
     public int getRarity() {
         return rarity;
     }
-
     public int getMaxStack() {
         return max_stack;
     }
-
     public int getCustomModelData() {
         return custom_model_data;
     }
-
     public Price getPrice() {
         return price;
     }
-
     public List<Tag> getTags() {
         return tags;
     }
-
     public Object getData() {
         return data;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T getTypedData(Class<T> clazz) {
+        if (data == null) return null;
+
+        if (clazz.isInstance(data)) return (T) data;
+
+        if (data instanceof JsonElement) {
+            return GSON.fromJson((JsonElement) data, clazz);
+        }
+
+        return GSON.fromJson(GSON.toJson(data), clazz);
+    }
+
+    public Object getAutoTypedData() {
+        if (data == null || category == null) return null;
+
+        return switch (category) {
+            case FOOD -> getTypedData(ItemFoodModel.class);
+            case TOOL -> getTypedData(ItemToolModel.class);
+            case WEAPON -> getTypedData(ItemWeaponModel.class);
+            // TODO: ARMOR, MATERIALを追加
+            default -> data;
+        };
     }
 
     public static class Price {

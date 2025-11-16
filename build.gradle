@@ -5,13 +5,13 @@ plugins {
 }
 
 group = 'net.alcaris'
-version = System.getenv("BUILD_VERSION") ?: '1.0.0-SNAPSHOT'
+version = '1.2.0'
 
 repositories {
     mavenCentral()
     maven {
-        name = "papermc-repo"
-        url = "https://repo.papermc.io/repository/maven-public/"
+        name = 'papermc'
+        url = 'https://repo.papermc.io/repository/maven-public/'
     }
     maven {
         name = "sonatype"
@@ -20,7 +20,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
+    compileOnly('io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT')
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
     implementation("org.java-websocket:Java-WebSocket:1.5.3")

@@ -1,7 +1,7 @@
 package net.alcaris.plugin.core.registry;
 
 import net.alcaris.plugin.core.AlcarisCore;
-import net.alcaris.plugin.core.lib.ApiClient;
+import net.alcaris.plugin.core.api.ApiClient;
 import net.alcaris.plugin.core.model.item.ItemBaseModel;
 
 import java.lang.reflect.Type;
@@ -20,23 +20,30 @@ public class ItemRegistry extends BaseRegistry<ItemBaseModel> {
     @Override
     protected CompletableFuture<List<ItemBaseModel>> fetchFromApi() {
         return apiClient.fetchItemsAsync().thenApply(items -> {
-            Map<String, ItemBaseModel> newMap = new HashMap<>();
+            int created = 0;
+            int updated = 0;
+            int unchanged = 0;
 
             for (ItemBaseModel item : items) {
                 String id = item.getId();
                 ItemBaseModel old = cache.get(id);
 
                 if (old == null) {
-                    plugin.getLogger().info("<item> Created: " + id);
+                    created++;
                 } else if (item.getVersion() != old.getVersion()) {
-                    plugin.getLogger().info("<item> Updated: " + id +
-                            " (" + old.getVersion() + " → " + item.getVersion() + ")");
+                    updated++;
+                } else {
+                    unchanged++;
                 }
-                newMap.put(id, item);
             }
 
-            cache.clear();
-            cache.putAll(newMap);
+            if (created + updated > 0) {
+                plugin.getLogger().info(String.format(
+                        "Item sync: %d total (%d new, %d updated, %d unchanged)",
+                        items.size(), created, updated, unchanged
+                ));
+            }
+
             return items;
         });
     }

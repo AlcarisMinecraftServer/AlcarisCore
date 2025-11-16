@@ -1,77 +1,98 @@
 package net.alcaris.plugin.core;
 
-import net.alcaris.plugin.core.commands.CommandManager;
-import net.alcaris.plugin.core.commands.SubCommand;
-import net.alcaris.plugin.core.lib.ApiClient;
-import net.alcaris.plugin.core.lib.APIWebSocketClient;
-import net.alcaris.plugin.core.lib.DataSyncManager;
+import net.alcaris.plugin.core.api.ApiClient;
+import net.alcaris.plugin.core.api.websocket.APIWebSocketClient;
+import net.alcaris.plugin.core.config.CoreConfig;
+import net.alcaris.plugin.core.database.DatabaseManager;
+import net.alcaris.plugin.core.service.DataSyncManager;
 import net.alcaris.plugin.core.registry.ItemRegistry;
-import org.bukkit.command.PluginCommand;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.net.URI;
-import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 public final class AlcarisCore extends JavaPlugin {
-    private CommandManager CommandManager;
+    private CoreConfig config;
+    private DatabaseManager databaseManager;
     private ApiClient apiClient;
     private ItemRegistry itemRegistry;
     private DataSyncManager dataSyncManager;
     private APIWebSocketClient webSocketClient;
 
+    private volatile boolean initialized = false;
+
     @Override
     public void onEnable() {
-        // Load Config
-        saveDefaultConfig();
-        FileConfiguration config = getConfig();
-
-        // Command Manager
-        CommandManager = new CommandManager();
-
-        PluginCommand alcarisCommand = getCommand("alcaris");
-
-        if (alcarisCommand == null) {
-            getLogger().severe("Failed to register command. Server shutting down due to fatal error.");
-            getServer().shutdown();
-            return;
-        }
-
-        alcarisCommand.setExecutor(CommandManager);
-        alcarisCommand.setTabCompleter(CommandManager);
-
-        // API and Data Manager
-        String apiUrl = config.getString("general.apiUrl");
-        String apiKey = config.getString("general.apiKey");
-
-        this.apiClient = new ApiClient(apiUrl, apiKey);
-        this.itemRegistry = new ItemRegistry(this, apiClient);
-        this.dataSyncManager = new DataSyncManager();
-        this.dataSyncManager.register("item", () -> itemRegistry.reloadAsync());
-
-        itemRegistry.reloadAsync()
-                .thenRun(() -> getLogger().info("Initial loading of item data completed."))
-                .exceptionally(ex -> {
-                    getLogger().severe("Failed to load item data: " + ex.getMessage());
-                    getServer().shutdown();
-                    return null;
-                });
-
-        // Connect WebSocket
         try {
-            String socketUrl = Objects.requireNonNull(apiUrl)
+            // Load Config
+            saveDefaultConfig();
+            this.config = new CoreConfig(getConfig());
+
+            if (!this.config.validate()) {
+                shutdownWithError("Invalid configuration. Check config.yml");
+                return;
+            }
+
+            // Load Database
+            // this.databaseManager = new DatabaseManager(config);
+
+            // Load API Client
+            this.apiClient = new ApiClient(
+                    this.config.getApiUrl(),
+                    this.config.getApiKey(),
+                    this
+            );
+
+            this.itemRegistry = new ItemRegistry(this, apiClient);
+            this.dataSyncManager = new DataSyncManager(this);
+            this.dataSyncManager.register("item", () -> itemRegistry.reloadAsync());
+
+            // Load itemRegistry form cache
+            itemRegistry.loadAllFromDisk();
+            getLogger().info("Loaded " + itemRegistry.size() + " items from cache");
+
+            itemRegistry.reloadAsync()
+                    .thenRun(() -> {
+                        getLogger().info("✓ Item data synchronized from API");
+                        initialized = true;
+                    })
+                    .exceptionally(ex -> {
+                        getLogger().severe("✗ CRITICAL: Failed to sync item data from API");
+                        getLogger().severe("Reason: " + ex.getMessage());
+                        shutdownWithError("API synchronization failed");
+                        return null;
+                    });
+
+            // Connect WebSocket
+            CompletableFuture.runAsync(() -> {
+                try {
+                    Thread.sleep(2000);
+                    connectWebSocket();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            });
+        } catch (Exception e) {
+            shutdownWithError("Fatal error during initialization: " + e.getMessage());
+        }
+    }
+
+    private void connectWebSocket() {
+        try {
+            String socketUrl = this.config.getApiUrl()
                     .replaceFirst("^https", "wss")
-                    .replaceFirst("^http",  "ws") + "/ws";
+                    .replaceFirst("^http", "ws") + "/ws";
             URI socketUri = URI.create(socketUrl);
 
-            if (webSocketClient == null || !webSocketClient.isOpen()) {
-                webSocketClient = new APIWebSocketClient(socketUri, apiKey, this);
-                webSocketClient.connect();
-                getLogger().info("WebSocket connected.");
-            }
+            this.webSocketClient = new APIWebSocketClient(socketUri, this.config.getApiKey(), this);
+            this.webSocketClient.connectBlocking();
+
+            getLogger().info("WebSocket connected!");
         } catch (Exception e) {
-            getLogger().severe("Failed to connect to WebSocket: " + e.getMessage());
-            getServer().shutdown();
+            getLogger().severe("WebSocket connection failed: " + e.getMessage());
+            getLogger().warning("Server will run without real-time updates");
         }
     }
 
@@ -82,18 +103,44 @@ public final class AlcarisCore extends JavaPlugin {
                 webSocketClient.close();
                 getLogger().info("WebSocket closed.");
             } catch (Exception e) {
-                getLogger().warning("Couldn't close WebSocket cleanly: " + e.getMessage());
-            } finally {
-                webSocketClient = null;
+                getLogger().warning("Failed to close WebSocket: " + e.getMessage());
             }
+        }
+
+//        if (databaseManager != null) {
+//            try {
+//                databaseManager.shutdown();
+//                getLogger().info("Database connection pool closed");
+//            } catch (Exception e) {
+//                getLogger().warning("Failed to close database: " + e.getMessage());
+//            }
+//        }
+
+        if (apiClient != null) {
+            apiClient.shutdown();
         }
     }
 
-    public void registerSubCommand(String name, SubCommand command) {
-        CommandManager.register(name, command);
+    private void shutdownWithError(String reason) {
+        getLogger().severe("========================================");
+        getLogger().severe("FATAL ERROR: " + reason);
+        getLogger().severe("Server will shut down in 3 seconds...");
+        getLogger().severe("========================================");
+
+        Bukkit.getScheduler().runTaskLater(this, () -> {
+            Bukkit.getServer().shutdown();
+        }, 60L);
     }
 
-    @SuppressWarnings("unused")
+    // Getters
+    public CoreConfig getCoreConfig() {
+        return config;
+    }
+
+    public DatabaseManager getDatabaseManager() {
+        return databaseManager;
+    }
+
     public ItemRegistry getItemRegistry() {
         return itemRegistry;
     }
@@ -102,8 +149,11 @@ public final class AlcarisCore extends JavaPlugin {
         return dataSyncManager;
     }
 
-    @SuppressWarnings("unused")
     public ApiClient getApiClient() {
         return apiClient;
+    }
+
+    public boolean isInitialized() {
+        return initialized;
     }
 }
