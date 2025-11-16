@@ -7,7 +7,6 @@ import net.alcaris.plugin.core.database.DatabaseManager;
 import net.alcaris.plugin.core.service.DataSyncManager;
 import net.alcaris.plugin.core.registry.ItemRegistry;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.net.URI;
@@ -127,9 +126,7 @@ public final class AlcarisCore extends JavaPlugin {
         getLogger().severe("Server will shut down in 3 seconds...");
         getLogger().severe("========================================");
 
-        Bukkit.getScheduler().runTaskLater(this, () -> {
-            Bukkit.getServer().shutdown();
-        }, 60L);
+        Bukkit.getScheduler().runTaskLater(this, () -> Bukkit.getServer().shutdown(), 60L);
     }
 
     // Getters

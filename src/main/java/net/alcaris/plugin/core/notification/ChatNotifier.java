@@ -22,8 +22,7 @@ public final class ChatNotifier {
             "deleted", "Deleted"
     );
 
-    public static void broadcast(AlcarisCore plugin,
-                                 String platform,
+    public static void broadcast(String platform,
                                  String category,
                                  String type,
                                  String id,

@@ -56,23 +56,3 @@ processResources {
 shadowJar {
     archiveClassifier.set('')
 }
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifact(shadowJar)
-            artifactId = 'alcaris-core'
-        }
-    }
-    repositories {
-        maven {
-            name = "nexus"
-            url = uri(System.getenv("NEXUS_URL") ?: "https://repo.alcaris.net/repository/maven-snapshots/")
-            credentials {
-                username = System.getenv("NEXUS_USERNAME")
-                password = System.getenv("NEXUS_PASSWORD")
-            }
-        }
-    }
-}
-

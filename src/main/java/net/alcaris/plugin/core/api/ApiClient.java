@@ -52,7 +52,7 @@ public class ApiClient {
             }
 
             @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
                 try (ResponseBody body = response.body()) {
                     if (!response.isSuccessful()) {
                         String errorMsg = "API returned error: " + response.code();
