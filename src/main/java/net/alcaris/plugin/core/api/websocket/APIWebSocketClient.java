@@ -34,7 +34,7 @@ public class APIWebSocketClient extends WebSocketClient {
 
     @Override
     public void onOpen(ServerHandshake handshake) {
-        plugin.getLogger().info("✓ WebSocket connected");
+        plugin.getLogger().info("WebSocket connected");
         reconnectHandler.reset();
         manualClose = false;
     }

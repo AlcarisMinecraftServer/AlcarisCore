@@ -62,11 +62,11 @@ public final class AlcarisCore extends JavaPlugin {
 
             itemRegistry.reloadAsync()
                     .thenRun(() -> {
-                        getLogger().info("✓ Item data synchronized from API");
+                        getLogger().info("Item data synchronized from API");
                         initialized = true;
                     })
                     .exceptionally(ex -> {
-                        getLogger().severe("✗ CRITICAL: Failed to sync item data from API");
+                        getLogger().severe("CRITICAL: Failed to sync item data from API");
                         getLogger().severe("Reason: " + ex.getMessage());
                         shutdownWithError("API synchronization failed");
                         return null;
@@ -95,8 +95,6 @@ public final class AlcarisCore extends JavaPlugin {
 
             this.webSocketClient = new APIWebSocketClient(socketUri, this.config.getApiKey(), this);
             this.webSocketClient.connectBlocking();
-
-            getLogger().info("WebSocket connected!");
         } catch (Exception e) {
             getLogger().severe("WebSocket connection failed: " + e.getMessage());
             getLogger().warning("Server will run without real-time updates");
