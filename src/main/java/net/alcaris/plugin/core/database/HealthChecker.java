@@ -93,9 +93,10 @@ public class HealthChecker {
         Bukkit.getScheduler().runTask(plugin, () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 player.kick(net.kyori.adventure.text.Component.text(
-                        "Server is undergoing emergency maintenance.\n" +
-                                "Database connection has been lost.\n" +
-                                "Please try again later."
+                        """
+                                Server is undergoing emergency maintenance.
+                                Database connection has been lost.
+                                Please try again later."""
                 ));
             }
 
