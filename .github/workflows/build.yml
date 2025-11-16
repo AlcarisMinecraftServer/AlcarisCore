@@ -5,13 +5,16 @@ on:
     tags:
       - 'v*.*.*'
 
+permissions:
+  contents: write
+
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Temurin JDK 21
         uses: actions/setup-java@v3
@@ -28,7 +31,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew shadowJar
+        run: ./gradlew clean shadowJar
 
       - name: Find built JAR
         run: |
@@ -37,7 +40,7 @@ jobs:
           echo "JAR_NAME=$(basename $JAR_PATH)" >> "$GITHUB_ENV"
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: ${{ env.JAR_PATH }}
           body: |
