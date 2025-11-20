@@ -61,8 +61,6 @@ processResources {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            from components.java
-
             artifact shadowJar
             artifactId = 'alcaris-core'
         }
@@ -85,7 +83,7 @@ publishing {
 }
 
 shadowJar {
-    archiveClassifier.set('all')
+    archiveClassifier.set('')
 }
 
 build.dependsOn shadowJar
