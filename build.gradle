@@ -58,6 +58,32 @@ processResources {
     }
 }
 
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            artifact shadowJar
+            artifactId = 'alcaris-core'
+        }
+    }
+    repositories {
+        maven {
+            name = "alcaris-repository"
+            url = "https://repo.onp.admin.alcaris.net/releases"
+
+            credentials {
+                username = findProperty("repoUser") ?: System.getenv("REPO_USER")
+                password = findProperty("repoPassword") ?: System.getenv("REPO_PASS")
+            }
+
+            authentication {
+                basic(BasicAuthentication)
+            }
+        }
+    }
+}
+
 shadowJar {
     archiveClassifier.set('')
 

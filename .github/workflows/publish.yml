@@ -1,0 +1,27 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+
+      - name: Publish to Repository
+        env:
+          REPO_USER: ${{ secrets.REPO_USER }}
+          REPO_PASS: ${{ secrets.REPO_PASS }}
+        run: ./gradlew publish
