@@ -42,6 +42,7 @@ public class ItemArmorModel {
         private float crt;
         private float crd;
         private float luk;
+        private float movement_speed;
 
         public float getHp() {
             return hp;
@@ -93,6 +94,10 @@ public class ItemArmorModel {
 
         public float getLuk() {
             return luk;
+        }
+
+        public float getMovementSpeed() {
+            return movement_speed;
         }
     }
 
@@ -158,6 +163,10 @@ public class ItemArmorModel {
 
     public float getLuk() {
         return base != null && base.getAttributes() != null ? base.getAttributes().getLuk() : 0f;
+    }
+
+    public float getMovementSpeed() {
+        return base != null && base.getAttributes() != null ? base.getAttributes().getMovementSpeed() : 0f;
     }
 
     public String getArmorType() {
