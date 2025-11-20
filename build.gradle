@@ -85,23 +85,7 @@ publishing {
 }
 
 shadowJar {
-    archiveClassifier.set('')
-
-    relocate 'com.zaxxer.hikari', 'net.alcaris.plugin.core.libs.hikari'
-    relocate 'com.mysql', 'net.alcaris.plugin.core.libs.mysql'
-    relocate 'org.slf4j', 'net.alcaris.plugin.core.libs.slf4j'
-    relocate 'com.google.gson', 'net.alcaris.plugin.core.libs.gson'
-    relocate 'okhttp3', 'net.alcaris.plugin.core.libs.okhttp3'
-    relocate 'okio', 'net.alcaris.plugin.core.libs.okio'
-    relocate 'org.java_websocket', 'net.alcaris.plugin.core.libs.websocket'
-
-    exclude 'META-INF/*.SF'
-    exclude 'META-INF/*.DSA'
-    exclude 'META-INF/*.RSA'
-    exclude 'META-INF/NOTICE*'
-    exclude 'META-INF/LICENSE*'
-
-    archiveFileName = "${project.name}.jar"
+    archiveClassifier.set('all')
 }
 
 build.dependsOn shadowJar
