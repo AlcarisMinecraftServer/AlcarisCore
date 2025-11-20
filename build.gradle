@@ -62,7 +62,7 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             artifact shadowJar
-            artifactId = 'alcaris-core'
+            artifactId = 'AlcarisCore'
         }
     }
     repositories {
