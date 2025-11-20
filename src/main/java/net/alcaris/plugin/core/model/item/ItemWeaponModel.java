@@ -12,18 +12,18 @@ public class ItemWeaponModel {
 
     public static class Base {
         private Attributes attributes;
-        private List<Buff> buffs;
-        private List<Effect> effects;
+        private List<Common.Buff> buffs;
+        private List<Common.Effect> effects;
 
         public Attributes getAttributes() {
             return attributes;
         }
 
-        public List<Buff> getBuffs() {
+        public List<Common.Buff> getBuffs() {
             return buffs;
         }
 
-        public List<Effect> getEffects() {
+        public List<Common.Effect> getEffects() {
             return effects;
         }
     }
@@ -61,15 +61,6 @@ public class ItemWeaponModel {
         }
     }
 
-    public static class Buff {
-        // TODO: Implement buff structure
-    }
-
-    public static class Effect {
-        // TODO: Implement effect structure
-    }
-
-    // Backward compatibility methods
     public String getType() {
         return weapon_type;
     }
@@ -106,7 +97,6 @@ public class ItemWeaponModel {
         return base != null && base.getAttributes() != null ? base.getAttributes().getDropRateBonus() : 0;
     }
 
-    // New getters
     public String getWeaponType() {
         return weapon_type;
     }

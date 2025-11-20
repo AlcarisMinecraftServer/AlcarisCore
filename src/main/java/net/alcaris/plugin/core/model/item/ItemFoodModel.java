@@ -8,9 +8,9 @@ public class ItemFoodModel {
     private float saturation;
     private boolean can_always_eat;
     private float eat_seconds;
-    private List<Effect> effects;
-    private List<Attribute> attributes;
-    private List<Buff> buffs;
+    private List<Common.Effect> effects;
+    private List<Common.Attribute> attributes;
+    private List<Common.Buff> buffs;
 
     public int getNutrition() {
         return nutrition;
@@ -28,79 +28,15 @@ public class ItemFoodModel {
         return eat_seconds;
     }
 
-    public List<Effect> getEffects() {
+    public List<Common.Effect> getEffects() {
         return effects;
     }
 
-    public List<Attribute> getAttributes() {
+    public List<Common.Attribute> getAttributes() {
         return attributes;
     }
 
-    public List<Buff> getBuff() {
+    public List<Common.Buff> getBuff() {
         return buffs;
-    }
-
-    public static class Effect {
-        private String effect;
-        private int duration;
-        private int amplifier;
-        private double chance;
-
-        public String getEffect() {
-            return effect;
-        }
-
-        public int getDuration() {
-            return duration;
-        }
-
-        public int getAmplifier() {
-            return amplifier;
-        }
-
-        public double getChance() {
-            return chance;
-        }
-    }
-
-    public static class Attribute {
-        private String attribute;
-        private String operation;
-        private int value;
-        private int duration;
-
-        public String getAttribute() {
-            return attribute;
-        }
-
-        public String getOperation() {
-            return operation;
-        }
-
-        public int getValue() {
-            return value;
-        }
-
-        public int getDuration() {
-            return duration;
-        }
-    }
-
-    public static class Buff {
-        private String kind;
-        private int duration;
-        private float amount;
-
-        public String getKind() {
-            return kind;
-        }
-
-        public int getDuration() {
-            return duration;
-        }
-
-        public float getAmount() {
-            return amount;
-        }
     }
 }

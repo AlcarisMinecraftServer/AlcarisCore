@@ -76,7 +76,8 @@ public class ItemBaseModel {
             case FOOD -> getTypedData(ItemFoodModel.class);
             case TOOL -> getTypedData(ItemToolModel.class);
             case WEAPON -> getTypedData(ItemWeaponModel.class);
-            // TODO: ARMOR, MATERIALを追加
+            case ARMOR -> getTypedData(ItemArmorModel.class);
+            // TODO: MATERIALを追加
             default -> data;
         };
     }
