@@ -1,0 +1,7 @@
+name: AlcarisCore
+version: '1.0.0'
+main: net.alcaris.plugin.core.AlcarisCore
+api-version: '1.21'
+authors: [ 'Alcaris Team' ]
+description: Core library of all homebrew plugins
+website: https://www.alcaris.net
