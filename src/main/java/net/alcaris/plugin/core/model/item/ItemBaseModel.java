@@ -2,6 +2,7 @@ package net.alcaris.plugin.core.model.item;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -56,6 +57,37 @@ public class ItemBaseModel {
         return data;
     }
 
+    /**
+     * Returns the item-specific {@code data} normalized to a Gson {@link JsonElement}.
+     * <p>
+     * This does not change the existing {@link #getData()} contract and is safe for
+     * callers that prefer JSON access without introducing a breaking change.
+     * <p>
+     * Typical usage in dependent plugins (e.g., alcarisitems):
+     * <pre>{@code
+     * JsonObject json = item.getDataAsJsonObject();
+     * if (json != null) {
+     *     int red = json.has("red") ? json.get("red").getAsInt() : 0;
+     * }
+     * }</pre>
+     *
+     * @return {@code JsonElement} view of data, or {@code null} when no data is present
+     */
+    public JsonElement getDataJson() {
+        if (data == null) return null;
+        if (data instanceof JsonElement json) return json;
+        return GSON.toJsonTree(data);
+    }
+
+    /**
+     * Convenience accessor to view {@code data} as a {@link JsonObject}.
+     * Returns {@code null} when {@code data} is absent or not an object.
+     */
+    public JsonObject getDataAsJsonObject() {
+        JsonElement el = getDataJson();
+        return (el != null && el.isJsonObject()) ? el.getAsJsonObject() : null;
+    }
+
     @SuppressWarnings("unchecked")
     public <T> T getTypedData(Class<T> clazz) {
         if (data == null) return null;
@@ -77,7 +109,7 @@ public class ItemBaseModel {
             case TOOL -> getTypedData(ItemToolModel.class);
             case WEAPON -> getTypedData(ItemWeaponModel.class);
             case ARMOR -> getTypedData(ItemArmorModel.class);
-            // TODO: MATERIALを追加
+            case MATERIAL -> getTypedData(ItemMaterialModel.class);
             default -> data;
         };
     }
