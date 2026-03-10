@@ -1,36 +1,37 @@
 package net.alcaris.plugin.core.model.item;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("unused")
-public class ItemMaterialModel extends ArrayList<String> {
+public class ItemMaterialModel {
     /**
      * Typed view of MATERIAL item data.
      * <p>
-     * MATERIAL data is stored as a JSON array of {@code "key:value"} entries,
-     * for example:
+     * MATERIAL data is stored as an object containing a
+     * {@code magic_materials} array of {@code "key:value"} entries, for example:
      * <pre>{@code
-     * ["red:10", "blue:1", "purple:3"]
-     * }</pre>
-     * Retrieve via:
-     * <pre>{@code
-     * ItemMaterialModel m = item.getTypedData(ItemMaterialModel.class);
-     * // or:
-     * JsonElement json = item.getDataJson();
+     * {
+     *   "magic_materials": ["red:10", "blue:1", "purple:3"]
+     * }
      * }</pre>
      * Missing colors are treated as {@code 0}.
      */
+    private List<String> magic_materials;
+
+    public List<String> getMagicMaterials() {
+        return magic_materials == null ? Collections.emptyList() : List.copyOf(magic_materials);
+    }
 
     public List<String> getEntries() {
-        return List.copyOf(this);
+        return getMagicMaterials();
     }
 
     public Map<String, Integer> asMap() {
         Map<String, Integer> values = new LinkedHashMap<>();
-        for (String entry : this) {
+        for (String entry : getMagicMaterials()) {
             ParsedEntry parsed = parseEntry(entry);
             if (parsed != null) {
                 values.put(parsed.key(), parsed.value());
