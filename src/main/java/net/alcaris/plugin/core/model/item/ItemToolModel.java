@@ -85,7 +85,7 @@ public class ItemToolModel {
             return correct_for_drops;
         }
 
-        @SuppressWarnings("all")
+        @SuppressWarnings("UnstableApiUsage")
         public void applyToToolRule(ToolComponent toolComponent) {
             if (blocks instanceof String blockString) {
                 if (blockString.startsWith("#")) {

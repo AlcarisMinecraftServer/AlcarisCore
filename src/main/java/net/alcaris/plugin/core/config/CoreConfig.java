@@ -11,6 +11,7 @@ public class CoreConfig {
     private final String dbUser;
     private final String dbPassword;
     private final int dbPoolSize;
+    private final boolean dbUseSSL;
 
     public CoreConfig(FileConfiguration config) {
         this.apiUrl = config.getString("general.apiUrl", "");
@@ -22,6 +23,7 @@ public class CoreConfig {
         this.dbUser = config.getString("database.user", "root");
         this.dbPassword = config.getString("database.password", "");
         this.dbPoolSize = config.getInt("database.poolSize", 10);
+        this.dbUseSSL = config.getBoolean("database.useSSL", false);
     }
 
     public boolean validate() {
@@ -41,4 +43,5 @@ public class CoreConfig {
     public String getDbUser() { return dbUser; }
     public String getDbPassword() { return dbPassword; }
     public int getDbPoolSize() { return dbPoolSize; }
+    public boolean isDbUseSSL() { return dbUseSSL; }
 }

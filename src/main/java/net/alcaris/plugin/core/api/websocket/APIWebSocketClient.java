@@ -13,6 +13,7 @@ import org.java_websocket.handshake.ServerHandshake;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class APIWebSocketClient extends WebSocketClient {
     private final AlcarisCore plugin;
@@ -94,9 +95,9 @@ public class APIWebSocketClient extends WebSocketClient {
     private static class ReconnectHandler {
         private final APIWebSocketClient client;
         private final AlcarisCore plugin;
-        private int attempt = 0;
+        private final AtomicInteger attempt = new AtomicInteger(0);
         private static final int MAX_ATTEMPTS = 10;
-        private static final long[] BACKOFF_DELAYS = {1, 2, 5, 10, 30, 60, 120, 300, 600, 1800}; // 秒
+        private static final long[] BACKOFF_DELAYS = {1, 2, 5, 10, 30, 60, 120, 300, 600, 1800};
 
         ReconnectHandler(APIWebSocketClient client, AlcarisCore plugin) {
             this.client = client;
@@ -104,14 +105,15 @@ public class APIWebSocketClient extends WebSocketClient {
         }
 
         void scheduleReconnect() {
-            if (attempt >= MAX_ATTEMPTS) {
+            int current = attempt.get();
+            if (current >= MAX_ATTEMPTS) {
                 plugin.getLogger().severe("WebSocket reconnection failed after " + MAX_ATTEMPTS + " attempts");
                 plugin.getLogger().severe("Server will run without real-time updates");
                 return;
             }
 
-            long delay = BACKOFF_DELAYS[Math.min(attempt, BACKOFF_DELAYS.length - 1)];
-            plugin.getLogger().info("Reconnecting in " + delay + " seconds... (attempt " + (attempt + 1) + "/" + MAX_ATTEMPTS + ")");
+            long delay = BACKOFF_DELAYS[Math.min(current, BACKOFF_DELAYS.length - 1)];
+            plugin.getLogger().info("Reconnecting in " + delay + " seconds... (attempt " + (current + 1) + "/" + MAX_ATTEMPTS + ")");
 
             Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
                 try {
@@ -119,14 +121,14 @@ public class APIWebSocketClient extends WebSocketClient {
                     plugin.getLogger().info("WebSocket reconnected");
                 } catch (Exception e) {
                     plugin.getLogger().warning("Reconnection failed: " + e.getMessage());
-                    attempt++;
+                    attempt.incrementAndGet();
                     scheduleReconnect();
                 }
             }, delay * 20L);
         }
 
         void reset() {
-            attempt = 0;
+            attempt.set(0);
         }
     }
 }

@@ -2,7 +2,9 @@ package net.alcaris.plugin.core.registry;
 
 import net.alcaris.plugin.core.AlcarisCore;
 import net.alcaris.plugin.core.api.ApiClient;
+import net.alcaris.plugin.core.event.ItemRegistryReloadEvent;
 import net.alcaris.plugin.core.model.item.ItemBaseModel;
+import org.bukkit.Bukkit;
 
 import java.lang.reflect.Type;
 import java.util.*;
@@ -15,6 +17,15 @@ public class ItemRegistry extends BaseRegistry<ItemBaseModel> {
     public ItemRegistry(AlcarisCore plugin, ApiClient apiClient) {
         super(plugin);
         this.apiClient = apiClient;
+    }
+
+    @Override
+    public CompletableFuture<Void> reloadAsync() {
+        return super.reloadAsync().thenRun(() ->
+            Bukkit.getScheduler().runTask(plugin, () ->
+                Bukkit.getPluginManager().callEvent(new ItemRegistryReloadEvent())
+            )
+        );
     }
 
     @Override

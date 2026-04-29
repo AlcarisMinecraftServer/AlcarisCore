@@ -28,10 +28,12 @@ public class DatabaseManager {
             HikariConfig hikariConfig = new HikariConfig();
 
             String jdbcUrl = String.format(
-                    "jdbc:mysql://%s:%d/%s?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Tokyo",
+                    "jdbc:mysql://%s:%d/%s?useSSL=%b&allowPublicKeyRetrieval=%b&serverTimezone=Asia/Tokyo",
                     config.getDbHost(),
                     config.getDbPort(),
-                    config.getDbName()
+                    config.getDbName(),
+                    config.isDbUseSSL(),
+                    !config.isDbUseSSL()
             );
 
             hikariConfig.setJdbcUrl(jdbcUrl);

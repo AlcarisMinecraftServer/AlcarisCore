@@ -2,6 +2,7 @@ package net.alcaris.plugin.core.registry;
 
 import com.google.gson.Gson;
 import net.alcaris.plugin.core.AlcarisCore;
+import org.bukkit.Bukkit;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -11,7 +12,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class BaseRegistry<T> {
-    protected final Map<String, T> cache = new ConcurrentHashMap<>();
+    protected volatile Map<String, T> cache = new ConcurrentHashMap<>();
     protected final Gson gson = new Gson();
     protected final AlcarisCore plugin;
     private final File cacheDirectory;
@@ -38,12 +39,17 @@ public abstract class BaseRegistry<T> {
 
     public CompletableFuture<Void> reloadAsync() {
         return fetchFromApi().thenAccept(items -> {
-            cache.clear();
+            Map<String, T> next = new ConcurrentHashMap<>();
             for (T item : items) {
-                String key = getKey(item);
-                cache.put(key, item);
-                saveItemToFile(key, item);
+                next.put(getKey(item), item);
             }
+            this.cache = next;
+
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+                for (T item : items) {
+                    saveItemToFile(getKey(item), item);
+                }
+            });
         });
     }
 

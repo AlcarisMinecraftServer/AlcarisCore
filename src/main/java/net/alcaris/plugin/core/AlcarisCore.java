@@ -11,7 +11,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.net.URI;
 import java.sql.SQLException;
-import java.util.concurrent.CompletableFuture;
 
 public final class AlcarisCore extends JavaPlugin {
     private CoreConfig config;
@@ -64,6 +63,7 @@ public final class AlcarisCore extends JavaPlugin {
                     .thenRun(() -> {
                         getLogger().info("Item data synchronized from API");
                         initialized = true;
+                        Bukkit.getScheduler().runTaskAsynchronously(this, this::connectWebSocket);
                     })
                     .exceptionally(ex -> {
                         getLogger().severe("CRITICAL: Failed to sync item data from API");
@@ -71,16 +71,6 @@ public final class AlcarisCore extends JavaPlugin {
                         shutdownWithError("API synchronization failed");
                         return null;
                     });
-
-            // Connect WebSocket
-            CompletableFuture.runAsync(() -> {
-                try {
-                    Thread.sleep(2000);
-                    connectWebSocket();
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-            });
         } catch (Exception e) {
             shutdownWithError("Fatal error during initialization: " + e.getMessage());
         }

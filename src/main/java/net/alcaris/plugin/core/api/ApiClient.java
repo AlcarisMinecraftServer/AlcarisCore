@@ -48,7 +48,7 @@ public class ApiClient {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 plugin.getLogger().severe("API Request Failed: " + e.getMessage());
-                future.completeExceptionally(new RuntimeException("Failed to fetch items from API", e));
+                future.completeExceptionally(new ApiException("Failed to fetch items from API", e));
             }
 
             @Override
@@ -57,12 +57,12 @@ public class ApiClient {
                     if (!response.isSuccessful()) {
                         String errorMsg = "API returned error: " + response.code();
                         plugin.getLogger().severe(errorMsg);
-                        future.completeExceptionally(new RuntimeException(errorMsg));
+                        future.completeExceptionally(new ApiException(errorMsg));
                         return;
                     }
 
                     if (body == null) {
-                        future.completeExceptionally(new RuntimeException("API response body is null"));
+                        future.completeExceptionally(new ApiException("API response body is null"));
                         return;
                     }
 
@@ -70,7 +70,7 @@ public class ApiClient {
                     JsonObject json = gson.fromJson(bodyString, JsonObject.class);
 
                     if (!json.has("data")) {
-                        future.completeExceptionally(new RuntimeException("API response missing 'data' field"));
+                        future.completeExceptionally(new ApiException("API response missing 'data' field"));
                         return;
                     }
 
@@ -81,7 +81,7 @@ public class ApiClient {
 
                 } catch (Exception e) {
                     plugin.getLogger().severe("Failed to parse API response: " + e.getMessage());
-                    future.completeExceptionally(e);
+                    future.completeExceptionally(new ApiException("Failed to parse API response", e));
                 }
             }
         });

@@ -9,5 +9,6 @@ database:
   port: 3306
   name: "alcaris"
   user: "root"
-  password: "password"
+  password: ""
   poolSize: 10
+  useSSL: false

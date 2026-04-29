@@ -101,19 +101,6 @@ public class ItemWeaponModel {
         }
     }
 
-    public String getType() {
-        return weapon_type;
-    }
-
-
-    public int getRequirement() {
-        return required_level;
-    }
-
-    public int getPolishingCount() {
-        return 0;
-    }
-
     public float getDamage() {
         return base != null && base.getAttributes() != null ? base.getAttributes().getAttackDamage() : 0f;
     }

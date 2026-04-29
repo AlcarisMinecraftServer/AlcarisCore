@@ -36,7 +36,7 @@ public class ItemFoodModel {
         return attributes;
     }
 
-    public List<Common.Buff> getBuff() {
+    public List<Common.Buff> getBuffs() {
         return buffs;
     }
 }

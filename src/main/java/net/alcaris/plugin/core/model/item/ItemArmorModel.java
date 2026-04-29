@@ -101,18 +101,6 @@ public class ItemArmorModel {
         }
     }
 
-    public String getType() {
-        return armor_type;
-    }
-
-    public int getRequirement() {
-        return required_level;
-    }
-
-    public int getPolishingCount() {
-        return 0;
-    }
-
     public float getHp() {
         return base != null && base.getAttributes() != null ? base.getAttributes().getHp() : 0f;
     }
