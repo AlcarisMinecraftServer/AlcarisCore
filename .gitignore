@@ -1,6 +1,11 @@
 # User-specific stuff
 .idea/
 
+# Eclipse
+.classpath
+.project
+.settings/
+
 *.iml
 *.ipr
 *.iws
