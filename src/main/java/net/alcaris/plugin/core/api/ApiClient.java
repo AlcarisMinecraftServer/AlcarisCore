@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 import net.alcaris.plugin.core.model.item.ItemBaseModel;
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("unused")
 public class ApiClient {
     private final OkHttpClient client;
     private final Gson gson = new Gson();

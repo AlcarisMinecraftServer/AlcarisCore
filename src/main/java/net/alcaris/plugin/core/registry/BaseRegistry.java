@@ -11,6 +11,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
+@SuppressWarnings("unused")
 public abstract class BaseRegistry<T> {
     protected volatile Map<String, T> cache = new ConcurrentHashMap<>();
     protected final Gson gson = new Gson();
@@ -20,8 +21,8 @@ public abstract class BaseRegistry<T> {
     public BaseRegistry(AlcarisCore plugin) {
         this.plugin = plugin;
         this.cacheDirectory = new File(plugin.getDataFolder(), "caches/" + getCategory());
-        if (!cacheDirectory.exists()) {
-            cacheDirectory.mkdirs();
+        if (!cacheDirectory.exists() && !cacheDirectory.mkdirs()) {
+            plugin.getLogger().warning("Failed to create cache directory: " + cacheDirectory.getPath());
         }
     }
 

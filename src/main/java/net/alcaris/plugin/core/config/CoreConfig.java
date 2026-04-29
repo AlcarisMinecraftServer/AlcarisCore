@@ -29,9 +29,7 @@ public class CoreConfig {
     public boolean validate() {
         if (apiUrl == null || apiUrl.isBlank()) return false;
         if (apiKey == null || apiKey.isBlank()) return false;
-        if (!apiUrl.startsWith("http://") && !apiUrl.startsWith("https://")) return false;
-
-        return true;
+        return apiUrl.startsWith("http://") || apiUrl.startsWith("https://");
     }
 
     // Getters

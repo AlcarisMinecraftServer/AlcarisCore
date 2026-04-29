@@ -7,6 +7,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
+@SuppressWarnings("unused")
 public class DataSyncManager {
     private final Map<String, Supplier<CompletableFuture<Void>>> registryReloaders = new ConcurrentHashMap<>();
     private final AlcarisCore plugin;

@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 
+@SuppressWarnings("unused")
 public class DatabaseManager {
     private final AlcarisCore plugin;
     private final CoreConfig config;
@@ -90,6 +91,7 @@ public class DatabaseManager {
         return dataSource.getConnection();
     }
 
+    @SuppressWarnings("SqlNoDataSourceInspection")
     public boolean testConnection() {
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement("SELECT 1");
