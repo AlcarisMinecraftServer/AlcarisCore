@@ -7,9 +7,9 @@ import net.alcaris.plugin.core.AlcarisCore;
 import okhttp3.*;
 
 import java.io.IOException;
-import java.util.concurrent.CompletableFuture;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 import net.alcaris.plugin.core.model.item.ItemBaseModel;
@@ -37,19 +37,19 @@ public class ApiClient {
                 .build();
     }
 
-    public CompletableFuture<List<ItemBaseModel>> fetchItemsAsync() {
+    public <T> CompletableFuture<List<T>> fetchListAsync(String path, Class<T[]> arrayClass) {
         Request request = new Request.Builder()
-                .url(apiUrl + "/items")
+                .url(apiUrl + path)
                 .addHeader("Authorization", "Bearer " + apiKey)
                 .build();
 
-        CompletableFuture<List<ItemBaseModel>> future = new CompletableFuture<>();
+        CompletableFuture<List<T>> future = new CompletableFuture<>();
 
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                plugin.getLogger().severe("API Request Failed: " + e.getMessage());
-                future.completeExceptionally(new ApiException("Failed to fetch items from API", e));
+                plugin.getLogger().severe("API Request Failed [" + path + "]: " + e.getMessage());
+                future.completeExceptionally(new ApiException("Failed to fetch from API: " + path, e));
             }
 
             @Override
@@ -76,18 +76,22 @@ public class ApiClient {
                     }
 
                     JsonArray dataArray = json.getAsJsonArray("data");
-                    ItemBaseModel[] items = gson.fromJson(dataArray, ItemBaseModel[].class);
+                    T[] items = gson.fromJson(dataArray, arrayClass);
 
                     future.complete(Arrays.asList(items));
 
                 } catch (Exception e) {
-                    plugin.getLogger().severe("Failed to parse API response: " + e.getMessage());
+                    plugin.getLogger().severe("Failed to parse API response [" + path + "]: " + e.getMessage());
                     future.completeExceptionally(new ApiException("Failed to parse API response", e));
                 }
             }
         });
 
         return future;
+    }
+
+    public CompletableFuture<List<ItemBaseModel>> fetchItemsAsync() {
+        return fetchListAsync("/items", ItemBaseModel[].class);
     }
 
     public void shutdown() {
